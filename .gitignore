@@ -1,0 +1,13 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+/.rspec
+/.rubocop.yml
+/familytree_storage.json
+# rspec failure tracking
+.rspec_status

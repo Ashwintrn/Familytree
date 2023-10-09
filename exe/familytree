@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "Familytree"
+
+regexes = {
+  add_regex: /(?<function>add) (?<entity>person) (?<person_1>\w+) (?<gender>male|female)/,
+  relation_regex: /(?<function>add) (?<entity>relationship) (?<relation>\w+)/,
+  connect_regex: /(?<function>connect) (?<person_1>\w+) as (?<relation>\w+) of (?<person_2>\w+)/,
+  count_regex: /(?<function>count) (?<relation>sons|daughters|wives) of (?<person>\w+)/,
+  d: /(?<function>show)/
+}
+
+input = ARGV.join(" ")
+
+regexes.each do |name, regex|
+  sentence = input.match(regex)
+  if sentence
+    if sentence['function'] == "add"
+      if sentence['entity'] == "person"
+        person_1 = sentence["person_1"]
+        gender = sentence["gender"]
+        Familytree.add_person(person_1, gender)
+      elsif sentence['entity'] == "relationship"
+        relation = sentence["relation"]
+        Familytree.add_relation(relation)
+      else
+        puts "INVALID INPUT"
+      end
+
+    elsif sentence['function'] == "connect"
+      person_1 = sentence["person_1"]
+      relation = sentence["relation"]
+      person_2 = sentence["person_2"]
+      Familytree.connect(person_1, relation, person_2)
+
+    elsif sentence['function'] == "count"
+      person = sentence["person"]
+      relation = sentence['relation'] 
+      Familytree.count_relationship(person, relation)
+
+    elsif sentence['function'] == "show"
+
+      puts "invalid part"
+      Familytree.display
+    end
+
+  end
+end
